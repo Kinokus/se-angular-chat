@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import {MessageService} from "../services/message.service";
+import {MessageListState} from "../states/state";
+import { Select } from '@ngxs/store';
 
 
 @Component({
@@ -12,6 +14,8 @@ export class MessageListComponent implements OnInit, OnDestroy {
   public messages: Observable<string[]>;
   public currentMsgId : string;
   private _msgSub: Subscription;
+
+
 
   constructor(private messageService: MessageService) { }
 
@@ -31,5 +35,18 @@ export class MessageListComponent implements OnInit, OnDestroy {
   public newMsg() {
     this.messageService.newMessage();
   }
+
+
+
+  // Stream of the entire Document List State
+  @Select(MessageListState) messages$: Observable<string[]>;
+
+  // @Select doesn't need a parameter if the name of the
+  // property matches the name of the state you're selecting.
+  @Select() messageList$: Observable<string[]>;
+  // You can also use a function to get the slice of state you need.
+  // @Select(state => state.documentList): Observable<string[]>;
+  // @Select(state => state.messageList): Observable<string[]>;
+
 
 }
