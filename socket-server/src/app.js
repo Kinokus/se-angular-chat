@@ -11,19 +11,19 @@ io.on("connection", socket => {
         previousId = currentId;
     };
 
-    socket.on("getMessage", msgId => {
+    socket.on("getMsg", msgId => {
         safeJoin(msgId);
         socket.emit("message", messages[msgId]);
     });
 
-    socket.on("addMessage", msg => {
+    socket.on("addMsg", msg => {
         messages[msg.id] = msg;
         safeJoin(msg.id);
         io.emit("messages", Object.keys(messages));
         socket.emit("message", msg);
     });
 
-    socket.on("editMessage", msg => {
+    socket.on("editMsg", msg => {
         messages[msg.id] = msg;
         socket.to(msg.id).emit("message", msg);
     });

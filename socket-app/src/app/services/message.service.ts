@@ -16,7 +16,7 @@ export class MessageService {
   }
 
   newMessage() {
-    this.socket.emit('addMsg', { id: MessageService.msgId(), doc: '' });
+    this.socket.emit('addMsg', { id: MessageService.msgId(), text: '' });
   }
 
   editMessage(message: Message) {
