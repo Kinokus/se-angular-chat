@@ -1,1 +1,6 @@
-<textarea [(ngModel)]='message.text' (keyup)='editMsg()' placeholder='Start typing...'></textarea>
+<div [formGroup]="messageForm" *ngIf="!!messageForm">
+  <label> <input formControlName="text" type="text"> </label>
+  <button type="submit">Edit</button>
+</div>
+<!--<textarea [(ngModel)]='message?.text' (keyup)='editMsg()' placeholder='Start typing...'></textarea>-->
+<pre>{{message$ | async | json}}</pre>

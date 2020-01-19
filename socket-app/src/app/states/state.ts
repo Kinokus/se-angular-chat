@@ -1,52 +1,142 @@
-import {State, Action, StateContext, Selector} from '@ngxs/store'
-import {Message} from "../models/message";
-import {MessageService} from "../services/message.service";
-import {MessageEditedFromServer} from "../actions/actions";
+import {State, Action, StateContext, Selector, NgxsOnInit} from '@ngxs/store';
+import {MessageService} from '../services/message.service';
+import {
+  ClearMessageList,
+  GetMessagesFormServer,
+  MessageEditedFromServer,
+  AddMessageId,
+  GetMessagesFormServerSuccess, ConnectToMessages, ConnectToMessage, GetMessageFormServerSuccess, MessageEditedFromUi
+} from '../actions/actions';
+import {debounceTime} from 'rxjs/operators';
 
 export interface MessageStateModel {
   id: string;
   text: string;
+  // editMessageForm: any;
 }
 
 @State<MessageStateModel>({
-  name: 'document', // required
+  name: 'message', // required
   defaults: { // optional: DocumentStateModel
     id: '',
-    text: 'Select an existing document or create a new one to get started'
+    text: ''
+    // editMessageForm: {
+    //   model: {id: '', text: ''},
+    //   dirty: false,
+    //   status: '',
+    //   errors: {}
+    // }
+
   }
 })
-export class MessageState {
+export class MessageState implements NgxsOnInit {
+  constructor(private messageService: MessageService) {
+  }
+
+
   @Action(MessageEditedFromServer)
-  editMessage(ctx: StateContext<MessageStateModel>, action: MessageEditedFromServer) {
+  editMessageFromServer(ctx: StateContext<MessageStateModel>, action: MessageEditedFromServer) {
     const state = ctx.getState(); // always returns the freshest slice of state
     ctx.setState({
       ...state,
       text: action.messageText
-    }); // the spread operator is shorthand for Object.assign({}, state, { doc: docText });
+    });
+  }
+
+  @Action(MessageEditedFromUi)
+  editedFromUi(ctx: StateContext<MessageStateModel>, action: MessageEditedFromServer) {
+    const state = ctx.getState(); // always returns the freshest slice of state
+    ctx.setState({
+      ...state,
+      text: action.messageText
+    });
+  }
+
+
+  @Action(GetMessageFormServerSuccess)
+  async getMessageFormServerSuccess(ctx: StateContext<MessageStateModel>, {payload}: GetMessageFormServerSuccess) {
+    ctx.setState(payload);
+  }
+
+
+  @Action(ConnectToMessage)
+  connectToMessage(ctx: StateContext<MessageStateModel>) {
+    const messageSocket = this.messageService.connectMessageSocket();
+    messageSocket
+      .pipe()
+      .subscribe(m => {
+        console.log(m);
+        ctx.dispatch(new GetMessageFormServerSuccess(m));
+      });
+  }
+
+  ngxsOnInit(ctx?: StateContext<any>) {
+    ctx.dispatch(new ConnectToMessage());
   }
 
 }
 
-@State<string[]>({
+export interface MessageListStateModel {
+  ids: string[];
+}
+
+@State<MessageListStateModel>({
   name: 'messageList',
-  defaults: ['']
+  defaults: {ids: []}
 })
-export class MessageListState {
+export class MessageListState implements NgxsOnInit {
+
   constructor(private messageService: MessageService) {
   }
+
 
   @Selector()
   static lastTenMessages(state: string[]) {
     return state.slice(-10);
   }
+
+  @Action(AddMessageId)
+  newMessage({getState, patchState}: StateContext<MessageListStateModel>, {payload}: AddMessageId) {
+    const state = getState();
+    const ids = state.ids.slice();
+    ids.push(payload);
+
+    patchState({...state, ids});
+  }
+
+  // @Action(GetMessagesFormServer)
+  // async getMessagesFormServer(ctx: StateContext<MessageListStateModel>, {payload}: GetMessagesFormServer) {
+  //   // const res = await this.messageService.getMessagesFromServer(payload); // params for get request
+  //   // ctx.dispatch(new GetMessagesFormServerSuccess(res));
+  // }
+
+  @Action(GetMessagesFormServerSuccess)
+  async getMessagesFormServerSuccess(ctx: StateContext<MessageListStateModel>, {payload}: GetMessagesFormServerSuccess) {
+    const state = ctx.getState();
+    ctx.patchState({...state, ids: payload});
+  }
+
+
+  @Action(ClearMessageList)
+  clearMessageList({getState, patchState}: StateContext<MessageListStateModel>) {
+    const state = getState();
+    patchState({...state, ids: []});
+  }
+
+  @Action(ConnectToMessages)
+  connectToMessages(ctx: StateContext<string[]>) {
+    const messagesSocket = this.messageService.connectMessagesSocket();
+    messagesSocket
+      .pipe(debounceTime(500))
+      .subscribe(m => {
+        ctx.dispatch(new GetMessagesFormServerSuccess(m));
+      });
+  }
+
+  ngxsOnInit(ctx?: StateContext<any>) {
+    ctx.dispatch(new ConnectToMessages());
+  }
+
+
 }
 
-/*
-* @State<string[]>( )
-export class DocumentListState {
-  @Selector()
-  static lastTenDocuments(state: string[]) {
-    return state.slice(-10);
-  }
-}
-* */

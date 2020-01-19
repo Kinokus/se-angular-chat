@@ -2,9 +2,10 @@
   <span
     (click)='newMsg()'>New Message</span>
   <span
-    [class.selected]='msgId === currentMsgId'
+    [class.selected]='msgId === (message$ | async).id'
     (click)='loadMsg(msgId)'
-    *ngFor='let msgId of messages  | async'>
+    *ngFor='let msgId of (messageList$  | async).ids'
+  >
     {{ msgId }}
   </span>
 </div>
