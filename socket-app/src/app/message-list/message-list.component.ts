@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import {MessageService} from "../services/message.service";
-import {MessageListState} from "../states/state";
-import { Select } from '@ngxs/store';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
+import {Select} from '@ngxs/store';
+import {MessageService} from '../services/message.service';
+import {MessageListState} from '../states/state';
 
 
 @Component({
@@ -12,12 +12,13 @@ import { Select } from '@ngxs/store';
 })
 export class MessageListComponent implements OnInit, OnDestroy {
   public messages: Observable<string[]>;
-  public currentMsgId : string;
+  public currentMsgId: string;
   private _msgSub: Subscription;
 
+  @Select(MessageListState.lastTenMessages) recentMessages$: Observable<string[]>;
 
-
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService) {
+  }
 
   ngOnInit() {
     this.messages = this.messageService.messages;
@@ -35,7 +36,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
   public newMsg() {
     this.messageService.newMessage();
   }
-
 
 
   // Stream of the entire Document List State

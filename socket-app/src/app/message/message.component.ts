@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import {Message} from "../models/message";
-import {MessageService} from "../services/message.service";
+import {Message} from '../models/message';
+import {MessageService} from '../services/message.service';
+import {MessageStateModel} from '../states/state';
+import {Store} from '@ngxs/store';
 
 @Component({
   selector: 'app-message',
@@ -12,7 +14,12 @@ import {MessageService} from "../services/message.service";
 export class MessageComponent implements OnInit, OnDestroy {
   message: Message;
   private _msgSub: Subscription;
-  constructor(private messageService: MessageService) { }
+  currentMessage$: Observable<MessageStateModel>;
+
+  constructor(private messageService: MessageService, private store: Store) {
+    this.currentMessage$ = this.store.select(state => state.message);
+
+  }
 
   ngOnInit() {
     this._msgSub = this.messageService.currentMessage.pipe(
