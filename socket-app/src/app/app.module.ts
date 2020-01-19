@@ -7,7 +7,9 @@ import {MessageListComponent} from './message-list/message-list.component';
 import {MessageComponent} from './message/message.component';
 import {SocketIoModule, SocketIoConfig} from 'ngx-socket-io';
 import {FormsModule} from '@angular/forms';
-import {StateStream, Store} from '@ngxs/store';
+import {NgxsModule, StateStream, Store} from '@ngxs/store';
+import {MessageListState, MessageState, MessageStateModel} from './states/state';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 
 
@@ -24,9 +26,12 @@ const config: SocketIoConfig = {url: 'http://localhost:4444', options: {}};
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    NgxsModule.forRoot([MessageState, MessageListState]),
+    NgxsReduxDevtoolsPluginModule.forRoot()
+
   ],
-  providers: [Store, StateStream, InternalStateOperations],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
