@@ -4,6 +4,7 @@ const io = require('socket.io')(http);
 const messages = {};
 
 io.on("connection", socket => {
+  console.log(socket.id);
   let previousId;
   const safeJoin = currentId => {
     socket.leave(previousId);
@@ -14,6 +15,7 @@ io.on("connection", socket => {
   socket.on("getMsg", msgId => {
     safeJoin(msgId);
     socket.emit("message", messages[msgId]);
+    console.log(socket.id);
   });
 
   socket.on("addMsg", msg => {

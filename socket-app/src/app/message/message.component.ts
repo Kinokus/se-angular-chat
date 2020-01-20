@@ -7,6 +7,8 @@ import {MessageState} from '../states/state';
 import {Select, Store} from '@ngxs/store';
 import {ConnectToMessages} from '../actions/actions';
 import {FormControl, FormGroup} from '@angular/forms';
+import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
+
 
 @Component({
   selector: 'app-message',
@@ -18,10 +20,29 @@ export class MessageComponent implements OnInit, OnDestroy {
   @Select(MessageState) message$: BehaviorSubject<MessageStateModel>;
   messageForm: FormGroup;
 
-  constructor(private messageService: MessageService, private store: Store) {
+  constructor(
+    private messageService: MessageService,
+    private store: Store,
+    // private webSocketSubject: WebSocketSubject<any>
+  ) {
+
+  }
+
+  sendMessage(id: string, text: string) {
+    const event = new SendWebSocketMessage({
+      type: 'addMsg',
+      model: {
+        id,
+        text
+      }
+    });
+    this.store.dispatch(event);
   }
 
   ngOnInit() {
+
+
+
     this.messageForm = new FormGroup({
       text: new FormControl(),
       id: new FormControl()

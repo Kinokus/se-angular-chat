@@ -1,4 +1,4 @@
-import {MessageStateModel} from '../states/state';
+import {MessageStateModel, MessageStateServerModel} from '../models/message';
 
 export class AddMessageId {
   static readonly type = '[Message List] Add Message'; // required
@@ -17,7 +17,7 @@ export class GetMessagesFormServerSuccess {
 
 export class GetMessageFormServerSuccess {
   static readonly type = '[Message] Get Message From Server'; // required
-  constructor(public payload: MessageStateModel) { }
+  constructor(public payload: MessageStateServerModel) { }
 }
 
 export class ClearMessageList {

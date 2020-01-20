@@ -3,5 +3,6 @@
 
 </div>
 <button (click)="editMsg(message$.value.model)">Edit</button>
+<button (click)="sendMessage('testId', 'testText')">Edit</button>
 <!--<textarea [(ngModel)]='message?.text' (keyup)='editMsg()' placeholder='Start typing...'></textarea>-->
 <pre>{{message$ | async | json}}</pre>

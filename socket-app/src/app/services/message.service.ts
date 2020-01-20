@@ -19,26 +19,29 @@ export class MessageService {
     return text;
   }
 
-  constructor(private socket: Socket, private store: Store) {
+  constructor(private store: Store) {
   }
+
+  // constructor(private socket: Socket, private store: Store) {
+  // }
 
 
   getMessage(id: string) {
-    this.socket.emit('getMsg', id);
+    // this.socket.emit('getMsg', id);
   }
 
   newMessage() {
-    this.socket.emit('addMsg', {id: MessageService.msgId(), text: ''});
+    // this.socket.emit('addMsg', {id: MessageService.msgId(), text: ''});
   }
 
   editMessage(message: Message) {
     console.log(message);
-    this.socket.emit('editMsg', message);
+    // this.socket.emit('editMsg', message);
   }
 
   editMessageFromUi(message: Message) {
     console.log(message);
-    this.socket.emit('editMsgFromUi', {message, ininitiator: true});
+    // this.socket.emit('editMsgFromUi', {message, ininitiator: true});
   }
 
   // getMessagesFromServer(params): Promise<any> {
@@ -49,10 +52,22 @@ export class MessageService {
   // }
 
   connectMessagesSocket() {
-    return this.socket.fromEvent<string[]>('messages');
+    // return this.socket.fromEvent<string[]>('messages');
   }
 
   connectMessageSocket() {
-    return this.socket.fromEvent<MessageStateServerModel>('message');
+    // return this.socket.fromEvent<MessageStateServerModel>('message');
   }
+
+
 }
+
+export function customDeserializer(msg: MessageEvent) {
+
+  // TODO: VERY DIRTY METHOD
+
+  console.log(msg);
+  return JSON.parse(msg.data);
+
+}
+

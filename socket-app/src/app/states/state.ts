@@ -8,7 +8,8 @@ import {
   GetMessagesFormServerSuccess, ConnectToMessages, ConnectToMessage, GetMessageFormServerSuccess, MessageEditedFromUi
 } from '../actions/actions';
 import {debounceTime} from 'rxjs/operators';
-import {MessageStateModel} from '../models/message';
+import {MessageStateModel, MessageStateServerModel} from '../models/message';
+import {WebSocketConnected} from '@ngxs/websocket-plugin';
 
 
 @State<MessageStateModel>({
@@ -21,6 +22,17 @@ export class MessageState implements NgxsOnInit {
   constructor(private messageService: MessageService) {
   }
 
+
+  @Action(WebSocketConnected)
+  webSocketConnected(ctx: StateContext<MessageStateModel>, action: WebSocketConnected) {
+    console.log(ctx);
+    console.log(action);
+    // const state = ctx.getState(); // always returns the freshest slice of state
+    // ctx.setState({
+    //   ...state,
+    //   model: {text: action.messageText, id: state.model.id}
+    // });
+  }
 
   @Action(MessageEditedFromServer)
   editMessageFromServer(ctx: StateContext<MessageStateModel>, action: MessageEditedFromServer) {
@@ -43,21 +55,20 @@ export class MessageState implements NgxsOnInit {
 
   @Action(GetMessageFormServerSuccess)
   async getMessageFormServerSuccess(ctx: StateContext<MessageStateModel>, {payload}: GetMessageFormServerSuccess) {
-
-    ctx.setState({model: payload});
+    ctx.setState(({model: payload}));
   }
 
 
-  @Action(ConnectToMessage)
-  connectToMessage(ctx: StateContext<MessageStateModel>) {
-    const messageSocket = this.messageService.connectMessageSocket();
-    messageSocket
-      .pipe()
-      .subscribe(m => {
-        console.log(m);
-        ctx.dispatch(new GetMessageFormServerSuccess(m));
-      });
-  }
+  // @Action(ConnectToMessage)
+  // connectToMessage(ctx: StateContext<MessageStateServerModel>) {
+  //   const messageSocket = this.messageService.connectMessageSocket();
+  //   messageSocket
+  //     .pipe()
+  //     .subscribe(m => {
+  //       console.log(m);
+  //       ctx.dispatch(new GetMessageFormServerSuccess(m));
+  //     });
+  // }
 
   ngxsOnInit(ctx?: StateContext<any>) {
     ctx.dispatch(new ConnectToMessage());
@@ -89,7 +100,6 @@ export class MessageListState implements NgxsOnInit {
     const state = getState();
     const ids = state.ids.slice();
     ids.push(payload);
-
     patchState({...state, ids});
   }
 
@@ -112,15 +122,15 @@ export class MessageListState implements NgxsOnInit {
     patchState({...state, ids: []});
   }
 
-  @Action(ConnectToMessages)
-  connectToMessages(ctx: StateContext<string[]>) {
-    const messagesSocket = this.messageService.connectMessagesSocket();
-    messagesSocket
-      .pipe(debounceTime(500))
-      .subscribe(m => {
-        ctx.dispatch(new GetMessagesFormServerSuccess(m));
-      });
-  }
+  // @Action(ConnectToMessages)
+  // connectToMessages(ctx: StateContext<string[]>) {
+  //   const messagesSocket = this.messageService.connectMessagesSocket();
+  //   messagesSocket
+  //     .pipe(debounceTime(500))
+  //     .subscribe(m => {
+  //       ctx.dispatch(new GetMessagesFormServerSuccess(m));
+  //     });
+  // }
 
   ngxsOnInit(ctx?: StateContext<any>) {
     ctx.dispatch(new ConnectToMessages());

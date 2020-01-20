@@ -23,6 +23,7 @@
     "@ngxs/form-plugin": "^3.6.1",
     "@ngxs/logger-plugin": "^3.6.1-dev.master-aa2aacf",
     "@ngxs/store": "^3.6.1-dev.master-aa2aacf",
+    "@ngxs/websocket-plugin": "^3.6.1",
     "immer": "^5.3.2",
     "ngx-socket-io": "^3.0.1",
     "rxjs": "~6.4.0",
