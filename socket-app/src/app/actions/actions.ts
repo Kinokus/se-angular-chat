@@ -1,12 +1,17 @@
 import {MessageStateModel, MessageStateServerModel} from '../models/message';
 
+export enum Actions {
+  AddMessageId = '[Message List] Add Message',
+  GetMessagesFormServer = '[Message List] Get Messages From Server',
+}
+
 export class AddMessageId {
-  static readonly type = '[Message List] Add Message'; // required
+  static readonly type = Actions.AddMessageId; // required
   constructor(public payload: string) { }
 }
 
 export class GetMessagesFormServer {
-  static readonly type = '[Message List] Get Messages From Server'; // required
+  static readonly type = Actions.GetMessagesFormServer; // required
   constructor(public payload: string[]) { }
 }
 
@@ -17,7 +22,7 @@ export class GetMessagesFormServerSuccess {
 
 export class GetMessageFormServerSuccess {
   static readonly type = '[Message] Get Message From Server'; // required
-  constructor(public payload: MessageStateServerModel) { }
+  constructor(public model: MessageStateServerModel) { }
 }
 
 export class ClearMessageList {

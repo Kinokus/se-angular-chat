@@ -54,8 +54,8 @@ export class MessageState implements NgxsOnInit {
 
 
   @Action(GetMessageFormServerSuccess)
-  async getMessageFormServerSuccess(ctx: StateContext<MessageStateModel>, {payload}: GetMessageFormServerSuccess) {
-    ctx.setState(({model: payload}));
+  async getMessageFormServerSuccess(ctx: StateContext<MessageStateModel>, {model}: GetMessageFormServerSuccess) {
+    ctx.setState(({model}));
   }
 
 

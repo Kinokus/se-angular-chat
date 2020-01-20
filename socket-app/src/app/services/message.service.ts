@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Socket} from 'ngx-socket-io';
 import {Message, MessageStateServerModel} from '../models/message';
 import {Store} from '@ngxs/store';
+import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
 
 @Injectable({
   providedIn: 'root'
@@ -27,21 +28,44 @@ export class MessageService {
 
 
   getMessage(id: string) {
+    const event = new SendWebSocketMessage({
+      type: 'getMsg',
+      model: {
+        id,
+        text: ''
+      }
+    });
+    this.store.dispatch(event);
+
     // this.socket.emit('getMsg', id);
   }
 
   newMessage() {
+    const event = new SendWebSocketMessage({
+      type: 'addMsg',
+      model: {
+        id: MessageService.msgId(),
+        text: ''
+      }
+    });
+    this.store.dispatch(event);
+
     // this.socket.emit('addMsg', {id: MessageService.msgId(), text: ''});
   }
 
   editMessage(message: Message) {
-    console.log(message);
+    // console.log(message);
     // this.socket.emit('editMsg', message);
   }
 
-  editMessageFromUi(message: Message) {
-    console.log(message);
+  editMessageFromUi(model: MessageStateServerModel) {
+    console.log(model);
     // this.socket.emit('editMsgFromUi', {message, ininitiator: true});
+    const event = new SendWebSocketMessage({
+      type: 'editMsgFromUi',
+      model
+    });
+    this.store.dispatch(event);
   }
 
   // getMessagesFromServer(params): Promise<any> {

@@ -42,7 +42,6 @@ export class MessageComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
 
-
     this.messageForm = new FormGroup({
       text: new FormControl(),
       id: new FormControl()
@@ -57,7 +56,11 @@ export class MessageComponent implements OnInit, OnDestroy {
       // TODO: WARNING QUICK AND DIRTY !!!
       console.log(t);
       const id = this.messageForm.get('id').value;
-      this.messageService.editMessageFromUi({id, text: t});
+      if (this.messageForm.value.text === t) {
+
+      } else {
+        this.messageService.editMessageFromUi({id, text: t});
+      }
     });
 
 

@@ -1,6 +1,7 @@
 const {Server} = require('ws');
 const {createServer} = require('http');
-const uuidv5 = require('uuid/v5');
+const uuid = require('uuid-random');
+
 
 const app = require('express')();
 
@@ -9,12 +10,14 @@ const ws = new Server({server});
 
 server.listen(4444);
 
-let messages = {};
+let messages = {'init id': {id: 'init id', text: 'init text'}};
 
 ws.on('connection', (socket) => {
-  socket.userId = uuidv5('socket.app', uuidv5.DNS);
+  socket.userId = uuid();
+  socket.send(JSON.stringify({type: '[Message List] Get Messages From Server', payload: Object.keys(messages)}));
   socket.on('message', data => {
     // That's the object that we passed into `SendWebSocketMessage` constructor
+
     const {type, model} = JSON.parse(data);
     // messages[msg.id] = msg;
     // safeJoin(msg.id);
@@ -28,36 +31,43 @@ ws.on('connection', (socket) => {
       case 'addMsg': {
         messages[model.id] = model;
         socket.msgId = model.id;
-
-        socket.send(JSON.stringify({
-          type: '[Message] Get Message From Server',
-          model: {
-            id: 'randomId',
-            text: 'randomText'
-          }
-        }));
-
         ws.clients.forEach(client => {
+          client.send(JSON.stringify({
+            type: '[Message List] Get Messages From Server',
+            payload: Object.keys(messages)
+          }));
+        });
+        socket.send(JSON.stringify({type: '[Message] Get Message From Server', model: messages[model.id]}));
+        break
+      }
 
+      case 'getMsg': {
+        socket.msgId = model.id;
+        socket.send(JSON.stringify({type: '[Message] Get Message From Server', model: messages[model.id]}));
+        break
+      }
 
-          if (client.msgId === model.id && client.userId !== socket.userId) {
-            client.send(JSON.stringify({
-                type: 'addedMsg',
-                model
-              })
-            )
+      case 'editMsgFromUi': {
+        messages[model.id] = model;
+        ws.clients.forEach(client => {
+          if (client.userId !== socket.userId) {
+            console.log(client.userId, socket.userId);
+            if (client.msgId === socket.msgId) {
+              console.log(client.msgId, socket.msgId);
+              client.send(JSON.stringify({type: '[Message] Get Message From Server', model: messages[model.id]}));
+            }
           }
         });
         break
       }
 
+      case 'getMessages': {
+        // socket.broadcast(JSON.stringify(Object.keys(messages)));
+        break;
+      }
+
     }
 
-    if (type === 'message') {
-    }
-  });
-
-  socket.on("addMsg", msg => {
   });
 
 
