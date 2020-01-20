@@ -1,6 +1,7 @@
-<div [formGroup]="messageForm" *ngIf="!!messageForm" ngxsForm="message">
+<div *ngIf="!!messageForm" [formGroup]="messageForm" ngxsForm="message">
   <label> <input formControlName="text" type="text"> </label>
-  <button type="submit">Edit</button>
+
 </div>
+<button (click)="editMsg(message$.value.model)">Edit</button>
 <!--<textarea [(ngModel)]='message?.text' (keyup)='editMsg()' placeholder='Start typing...'></textarea>-->
 <pre>{{message$ | async | json}}</pre>

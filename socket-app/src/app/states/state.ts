@@ -12,18 +12,9 @@ import {MessageStateModel} from '../models/message';
 
 
 @State<MessageStateModel>({
-  name: 'message', // required
-  defaults: { // optional: DocumentStateModel
-    // id: '',
-    // text: '',
+  name: 'message',
+  defaults: {
     model: {id: '', text: ''}
-    // editMessageForm: {
-    //   model: {id: '', text: ''},
-    //   dirty: false,
-    //   status: '',
-    //   errors: {}
-    // }
-
   }
 })
 export class MessageState implements NgxsOnInit {
@@ -52,6 +43,7 @@ export class MessageState implements NgxsOnInit {
 
   @Action(GetMessageFormServerSuccess)
   async getMessageFormServerSuccess(ctx: StateContext<MessageStateModel>, {payload}: GetMessageFormServerSuccess) {
+
     ctx.setState({model: payload});
   }
 

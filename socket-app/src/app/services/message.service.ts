@@ -32,7 +32,13 @@ export class MessageService {
   }
 
   editMessage(message: Message) {
+    console.log(message);
     this.socket.emit('editMsg', message);
+  }
+
+  editMessageFromUi(message: Message) {
+    console.log(message);
+    this.socket.emit('editMsgFromUi', {message, ininitiator: true});
   }
 
   // getMessagesFromServer(params): Promise<any> {

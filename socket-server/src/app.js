@@ -28,6 +28,11 @@ io.on("connection", socket => {
     socket.to(msg.id).emit("message", msg);
   });
 
+  socket.on("editMsgFromUi", payload => {
+    messages[payload.message.id] = payload.message;
+    socket.to(payload.message.id).emit("message", messages[payload.message.id]);
+  });
+
 
   io.emit("messages", Object.keys(messages));
 
