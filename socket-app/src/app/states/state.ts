@@ -8,18 +8,15 @@ import {
   GetMessagesFormServerSuccess, ConnectToMessages, ConnectToMessage, GetMessageFormServerSuccess, MessageEditedFromUi
 } from '../actions/actions';
 import {debounceTime} from 'rxjs/operators';
+import {MessageStateModel} from '../models/message';
 
-export interface MessageStateModel {
-  id: string;
-  text: string;
-  // editMessageForm: any;
-}
 
 @State<MessageStateModel>({
   name: 'message', // required
   defaults: { // optional: DocumentStateModel
-    id: '',
-    text: ''
+    // id: '',
+    // text: '',
+    model: {id: '', text: ''}
     // editMessageForm: {
     //   model: {id: '', text: ''},
     //   dirty: false,
@@ -39,7 +36,7 @@ export class MessageState implements NgxsOnInit {
     const state = ctx.getState(); // always returns the freshest slice of state
     ctx.setState({
       ...state,
-      text: action.messageText
+      model: {text: action.messageText, id: state.model.id}
     });
   }
 
@@ -48,14 +45,14 @@ export class MessageState implements NgxsOnInit {
     const state = ctx.getState(); // always returns the freshest slice of state
     ctx.setState({
       ...state,
-      text: action.messageText
+      model: {text: action.messageText, id: state.model.id}
     });
   }
 
 
   @Action(GetMessageFormServerSuccess)
   async getMessageFormServerSuccess(ctx: StateContext<MessageStateModel>, {payload}: GetMessageFormServerSuccess) {
-    ctx.setState(payload);
+    ctx.setState({model: payload});
   }
 
 

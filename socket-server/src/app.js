@@ -28,9 +28,6 @@ io.on("connection", socket => {
     socket.to(msg.id).emit("message", msg);
   });
 
-  socket.on("getAllMsgs", () => {
-    io.emit("messages", Object.keys(messages));
-  });
 
   io.emit("messages", Object.keys(messages));
 

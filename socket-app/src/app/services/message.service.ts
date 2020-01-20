@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Socket} from 'ngx-socket-io';
-import {Message} from '../models/message';
+import {Message, MessageStateServerModel} from '../models/message';
 import {Store} from '@ngxs/store';
-import {GetMessagesFormServerSuccess} from '../actions/actions';
-import {MessageStateModel} from '../states/state';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +45,8 @@ export class MessageService {
   connectMessagesSocket() {
     return this.socket.fromEvent<string[]>('messages');
   }
+
   connectMessageSocket() {
-    return this.socket.fromEvent<MessageStateModel>('message');
+    return this.socket.fromEvent<MessageStateServerModel>('message');
   }
 }

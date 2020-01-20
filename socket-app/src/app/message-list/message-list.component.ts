@@ -2,9 +2,10 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Observable, Subscription} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
 import {MessageService} from '../services/message.service';
-import {MessageListState, MessageListStateModel, MessageState, MessageStateModel} from '../states/state';
+import {MessageListState, MessageListStateModel, MessageState, } from '../states/state';
 import {GetMessagesFormServerSuccess} from '../actions/actions';
 import {Socket} from 'ngx-socket-io';
+import {MessageStateModel} from '../models/message';
 
 
 @Component({

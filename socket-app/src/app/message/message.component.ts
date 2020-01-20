@@ -1,9 +1,9 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {debounceTime, startWith} from 'rxjs/operators';
-import {Message} from '../models/message';
+import {Message, MessageStateModel} from '../models/message';
 import {MessageService} from '../services/message.service';
-import {MessageState, MessageStateModel} from '../states/state';
+import {MessageState} from '../states/state';
 import {Select, Store} from '@ngxs/store';
 import {ConnectToMessages} from '../actions/actions';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -27,17 +27,11 @@ export class MessageComponent implements OnInit, OnDestroy {
       id: new FormControl()
     });
 
-    this.message$.subscribe(m => {
-      // TODO: WARNING QUICK AND DIRTY !!!
-      console.log(m);
-      this.messageForm.setValue(m);
-    });
-
-    this.messageForm.valueChanges.pipe(debounceTime(500)).subscribe(v => {
-      // TODO: WARNING QUICK AND DIRTY !!!
-      console.log(v);
-      this.messageService.editMessage(v);
-    });
+    // this.messageForm.valueChanges.pipe(debounceTime(500)).subscribe(v => {
+    //   // TODO: WARNING QUICK AND DIRTY !!!
+    //   console.log(v);
+    //   this.messageService.editMessage(v);
+    // });
 
 
   }
@@ -46,7 +40,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   editMsg() {
-    this.messageService.editMessage(this.message$.value);
+    this.messageService.editMessage(this.message$.value.model);
   }
 
 }

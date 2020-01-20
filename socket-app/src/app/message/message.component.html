@@ -1,4 +1,4 @@
-<div [formGroup]="messageForm" *ngIf="!!messageForm">
+<div [formGroup]="messageForm" *ngIf="!!messageForm" ngxsForm="message">
   <label> <input formControlName="text" type="text"> </label>
   <button type="submit">Edit</button>
 </div>
