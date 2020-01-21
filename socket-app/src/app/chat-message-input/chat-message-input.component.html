@@ -1,1 +1,6 @@
-<p>chat-message-input works!</p>
+<div *ngIf="!!chatMessageForm" [formGroup]="chatMessageForm">
+  <label> <input formControlName="text" type="text"> </label>
+  <button (click)="sendMessage()">
+    Send
+  </button>
+</div>

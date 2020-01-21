@@ -25,8 +25,8 @@ export class MessageState implements NgxsOnInit {
 
   @Action(WebSocketConnected)
   webSocketConnected(ctx: StateContext<MessageStateModel>, action: WebSocketConnected) {
-    console.log(ctx);
-    console.log(action);
+    // console.log(ctx);
+    // console.log(action);
     // const state = ctx.getState(); // always returns the freshest slice of state
     // ctx.setState({
     //   ...state,
@@ -88,7 +88,6 @@ export class MessageListState implements NgxsOnInit {
 
   constructor(private messageService: MessageService) {
   }
-
 
   @Selector()
   static lastTenMessages(state: string[]) {

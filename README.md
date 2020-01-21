@@ -6,12 +6,14 @@
  - work only as relay
  - on connection of new user get messages from all connected users
  - message id - `timestamp + uuid`
+ - typing online
 ### UI
  - save messages in local storage
  - send private messages
  - show / hide windows 
  - add landing page (maybe)
  - css
+ - typing online
 
 
 

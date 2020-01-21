@@ -1,1 +1,1 @@
-<p>chat-message-window works!</p>
+<p *ngFor="let chatMessage of (chat$ | async).model.chatMessages">{{chatMessage | json}}</p>

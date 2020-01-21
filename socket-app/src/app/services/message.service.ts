@@ -59,7 +59,6 @@ export class MessageService {
   }
 
   editMessageFromUi(model: MessageStateServerModel) {
-    console.log(model);
     // this.socket.emit('editMsgFromUi', {message, ininitiator: true});
     const event = new SendWebSocketMessage({
       type: 'editMsgFromUi',
@@ -83,15 +82,6 @@ export class MessageService {
     // return this.socket.fromEvent<MessageStateServerModel>('message');
   }
 
-
-}
-
-export function customDeserializer(msg: MessageEvent) {
-
-  // TODO: VERY DIRTY METHOD
-
-  console.log(msg);
-  return JSON.parse(msg.data);
 
 }
 

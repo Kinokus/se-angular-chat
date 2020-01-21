@@ -12,19 +12,20 @@ import {MessageListState, MessageState} from './states/state';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {NgxsFormPluginModule} from '@ngxs/form-plugin';
 import {NgxsWebsocketPluginModule} from '@ngxs/websocket-plugin';
-import {customDeserializer} from './services/message.service';
-import { LegacyComponent } from './legacy/legacy.component';
+
+import {LegacyComponent} from './legacy/legacy.component';
 import {RouterModule} from '@angular/router';
-import { ChatWindowComponent } from './chat-window/chat-window.component';
-import { ChatMessageWindowComponent } from './chat-message-window/chat-message-window.component';
-import { ChatUsersWindowComponent } from './chat-users-window/chat-users-window.component';
-import { ChatMessageInputComponent } from './chat-message-input/chat-message-input.component';
+import {ChatWindowComponent} from './chat-window/chat-window.component';
+import {ChatMessageWindowComponent} from './chat-message-window/chat-message-window.component';
+import {ChatUsersWindowComponent} from './chat-users-window/chat-users-window.component';
+import {ChatMessageInputComponent} from './chat-message-input/chat-message-input.component';
+import {ChatState, ChatUserState} from './states/chat-state';
+import {ChatUserStateComponent} from './chat-user-state/chat-user-state.component';
 
 
 // const config: SocketIoConfig = {url: 'http://localhost:4444', options: {}};
 const config = {
-  url: 'ws://localhost:4444',
-  deserializer: customDeserializer
+  url: 'ws://localhost:4444'
 };
 
 
@@ -37,18 +38,19 @@ const config = {
     ChatWindowComponent,
     ChatMessageWindowComponent,
     ChatUsersWindowComponent,
-    ChatMessageInputComponent
+    ChatMessageInputComponent,
+    ChatUserStateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot([
-      { path: 'legacy', component: LegacyComponent },
-      { path: '', component: ChatWindowComponent },
+      {path: 'legacy', component: LegacyComponent},
+      {path: '', component: ChatWindowComponent},
     ]),
     FormsModule,
     // SocketIoModule.forRoot(config),
-    NgxsModule.forRoot([MessageState, MessageListState]),
+    NgxsModule.forRoot([MessageState, MessageListState, ChatState, ChatUserState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
     NgxsWebsocketPluginModule.forRoot(config),
