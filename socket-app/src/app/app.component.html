@@ -1,5 +1,11 @@
-<div class="main">
-<app-message-list></app-message-list>
-<app-message></app-message>
+<div class="main-screen">
+  <div class="main-header">
+    <a [routerLink]="['/']" [title]="'Main'"> Go to the Main Screen </a>
+    <a [routerLink]="['/legacy']" [title]="'Legacy'"> Go to the legacy file </a>
+
+  </div>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+
 </div>
-<router-outlet></router-outlet>

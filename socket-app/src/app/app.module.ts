@@ -13,6 +13,8 @@ import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {NgxsFormPluginModule} from '@ngxs/form-plugin';
 import {NgxsWebsocketPluginModule} from '@ngxs/websocket-plugin';
 import {customDeserializer} from './services/message.service';
+import { LegacyComponent } from './legacy/legacy.component';
+import {RouterModule} from '@angular/router';
 
 
 // const config: SocketIoConfig = {url: 'http://localhost:4444', options: {}};
@@ -26,11 +28,15 @@ const config = {
   declarations: [
     AppComponent,
     MessageListComponent,
-    MessageComponent
+    MessageComponent,
+    LegacyComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule.forRoot([
+      { path: 'legacy', component: LegacyComponent },
+    ]),
     FormsModule,
     // SocketIoModule.forRoot(config),
     NgxsModule.forRoot([MessageState, MessageListState]),
