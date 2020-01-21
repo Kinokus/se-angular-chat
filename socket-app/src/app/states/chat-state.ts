@@ -1,4 +1,4 @@
-import {ChatModel, ChatNewConnection, ChatNewMessage, ChatRequestMessages, ChatUserModel} from '../actions/chat-actions';
+import {ChatGetMessages, ChatModel, ChatNewConnection, ChatNewMessage, ChatRequestMessages, ChatUserModel} from '../actions/chat-actions';
 import {Action, NgxsOnInit, State, StateContext, Store} from '@ngxs/store';
 import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
 
@@ -20,6 +20,7 @@ export class ChatState implements NgxsOnInit {
   chatNewMessage(
     {getState, patchState, setState}: StateContext<ChatModel>,
     {payload}: ChatNewMessage) {
+    console.log(payload);
     const state = getState();
     const messages = state.model.chatMessages.slice();
     messages.push(payload);
@@ -27,7 +28,7 @@ export class ChatState implements NgxsOnInit {
   }
 
   @Action(ChatRequestMessages)
-  chatRequestMessages({getState, patchState, setState}: StateContext<ChatModel>) {
+  chatRequestMessages({getState}: StateContext<ChatModel>) {
     const state = getState();
     const event = new SendWebSocketMessage({
       type: 'chatSendMessages',
@@ -36,6 +37,15 @@ export class ChatState implements NgxsOnInit {
       }
     });
     this.store.dispatch(event);
+  }
+
+  @Action(ChatGetMessages)
+  chatGetMessages({getState, patchState}: StateContext<any>, {payload}: ChatGetMessages) {
+    const state = getState();
+    // console.log(state.model.chatMessages.slice());
+    // console.log(payload.messages);
+    const messages = state.model.chatMessages.slice().concat(payload.messages);
+    patchState({...state, model: {chatMessages: messages}});
   }
 
 

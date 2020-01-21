@@ -1,1 +1,7 @@
-<p *ngFor="let chatMessage of (chat$ | async).model.chatMessages">{{chatMessage | json}}</p>
+<div class="main-content">
+  <div *ngFor="let chatMessage of (chat$ | async).model.chatMessages">
+    {{chatMessage['id']}} -
+    {{chatMessage['text']}} -
+    {{chatMessage['senderId']}}
+  </div>
+</div>

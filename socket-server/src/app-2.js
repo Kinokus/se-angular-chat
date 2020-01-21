@@ -18,7 +18,11 @@ ws.on('connection', (socket) => {
   socket.send(
     JSON.stringify({
       type: '[Chat] New Message',
-      payload: {text: `Your new Id is ${socket.userId}`, id: 'id', senderId: socket.userId}
+      payload: {
+        text: `Your new Id is ${socket.userId.split('-')[1]}`,
+        id: getUuid(`${new Date().getTime().toString()}_${socket.userId}_join_Us`),
+        senderId: socket.userId
+      }
     }));
 
   socket.send(
@@ -33,7 +37,11 @@ ws.on('connection', (socket) => {
       client.send(
         JSON.stringify({
           type: '[Chat] New Message',
-          payload: {text: `${socket.userId} join Us`, id: '', senderId: socket.userId}
+          payload: {
+            text: `${socket.userId.split('-')[1]} join Us`,
+            id: getUuid(`${new Date().getTime().toString()}_${socket.userId}_join_Us`),
+            senderId: socket.userId
+          }
         }));
 
       client.send(
@@ -66,8 +74,20 @@ ws.on('connection', (socket) => {
         break;
       }
 
-      case 'chatSendMessages':{
-        
+      case 'chatSendMessages': {
+        //TODO filter maintenance messages !
+        console.log(model);
+        ws.clients.forEach(client => {
+          if (client.userId !== socket.userId) {
+            client.send(
+              JSON.stringify({
+                type: '[Chat] Get Messages',
+                payload: {messages: model.messages}
+              }));
+          }
+        });
+
+
         break
       }
 
