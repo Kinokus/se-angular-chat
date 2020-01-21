@@ -1,5 +1,6 @@
-import {ChatModel, ChatNewConnection, ChatNewMessage, ChatUserModel} from '../actions/chat-actions';
-import {Action, NgxsOnInit, State, StateContext} from '@ngxs/store';
+import {ChatModel, ChatNewConnection, ChatNewMessage, ChatRequestMessages, ChatUserModel} from '../actions/chat-actions';
+import {Action, NgxsOnInit, State, StateContext, Store} from '@ngxs/store';
+import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
 
 @State<ChatModel>({
   name: 'chat',
@@ -11,7 +12,9 @@ import {Action, NgxsOnInit, State, StateContext} from '@ngxs/store';
 })
 export class ChatState implements NgxsOnInit {
 
-  // TODO: send message
+  constructor(private store: Store) {
+
+  }
 
   @Action(ChatNewMessage)
   chatNewMessage(
@@ -21,6 +24,18 @@ export class ChatState implements NgxsOnInit {
     const messages = state.model.chatMessages.slice();
     messages.push(payload);
     patchState({...state, model: {chatMessages: messages}});
+  }
+
+  @Action(ChatRequestMessages)
+  chatRequestMessages({getState, patchState, setState}: StateContext<ChatModel>) {
+    const state = getState();
+    const event = new SendWebSocketMessage({
+      type: 'chatSendMessages',
+      model: {
+        messages: state.model.chatMessages
+      }
+    });
+    this.store.dispatch(event);
   }
 
 

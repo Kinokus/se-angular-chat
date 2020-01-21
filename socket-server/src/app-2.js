@@ -27,12 +27,19 @@ ws.on('connection', (socket) => {
       payload: {model: {id: socket.userId}}
     }));
 
+
   ws.clients.forEach(client => {
     if (client.userId !== socket.userId) {
       client.send(
         JSON.stringify({
           type: '[Chat] New Message',
           payload: {text: `${socket.userId} join Us`, id: '', senderId: socket.userId}
+        }));
+
+      client.send(
+        JSON.stringify({
+          type: '[Chat] Request Messages',
+          payload: {}
         }));
     }
   });
@@ -59,6 +66,10 @@ ws.on('connection', (socket) => {
         break;
       }
 
+      case 'chatSendMessages':{
+        
+        break
+      }
 
       // todo: legacy
       case 'message': {
