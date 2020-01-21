@@ -36,14 +36,4 @@ export class MessageListComponent implements OnInit, OnDestroy {
   }
 
 
-  // Stream of the entire Document List State
-
-  // @Select doesn't need a parameter if the name of the
-  // property matches the name of the state you're selecting.
-
-  // You can also use a function to get the slice of state you need.
-  // @Select(state => state.documentList): Observable<string[]>;
-  // @Select(state => state.messageList): Observable<string[]>;
-
-
 }
