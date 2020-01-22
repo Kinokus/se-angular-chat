@@ -1,0 +1,10 @@
+.main-content{
+
+  border: 1px solid darksalmon;
+  overflow-y: auto;
+  height: 100%;
+  .user-image{
+    width: var(--user-image-size);
+    height: var(--user-image-size);
+  }
+}

@@ -1,6 +1,21 @@
-import {ChatGetMessages, ChatModel, ChatNewConnection, ChatNewMessage, ChatRequestMessages, ChatUserModel} from '../actions/chat-actions';
+import {
+  ChatGetMessages,
+  ChatModel,
+  ChatNewConnection,
+  ChatNewMessage,
+  ChatNewUser,
+  ChatRequestMessages,
+  ChatUserModel
+} from '../actions/chat-actions';
 import {Action, NgxsOnInit, State, StateContext, Store} from '@ngxs/store';
 import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
+
+export class ChatUsersModel {
+  model: {
+    users: ChatUserModel[]
+  };
+}
+
 
 @State<ChatModel>({
   name: 'chat',
@@ -44,7 +59,18 @@ export class ChatState implements NgxsOnInit {
     const state = getState();
     // console.log(state.model.chatMessages.slice());
     // console.log(payload.messages);
-    const messages = state.model.chatMessages.slice().concat(payload.messages);
+    let messages = state.model.chatMessages.slice().concat(payload.messages);
+
+    const messageHelper: any = {};
+    messages.forEach(m => {
+      messageHelper[m.id] = m;
+    });
+    messages = [];
+    Object.keys(messageHelper).forEach(mk => {
+      messages.push(messageHelper[mk]);
+    });
+
+
     patchState({...state, model: {chatMessages: messages}});
   }
 
@@ -58,7 +84,6 @@ export class ChatState implements NgxsOnInit {
     return undefined;
   }
 }
-
 
 @State<ChatUserModel>({
   name: 'chatUser',
@@ -78,7 +103,43 @@ export class ChatUserState implements NgxsOnInit {
 
     const state = getState();
     const id = payload.model.id;
-    patchState({...state, model: {id}});
+    const qrImage = payload.model.qrImage;
+    patchState({...state, model: {id, qrImage}});
+  }
+
+
+  ngxsOnInit(ctx?: StateContext<any>): void | any {
+    return undefined;
+  }
+}
+
+
+@State<ChatUsersModel>({
+  name: 'chatUsers',
+  defaults: {
+    model: {
+      users: []
+    }
+  }
+})
+export class ChatUsersState implements NgxsOnInit {
+  @Action(ChatNewUser)
+  chatNewUser({getState, patchState, setState}: StateContext<ChatUsersModel>,
+              {payload}: ChatNewUser) {
+
+    const state = getState();
+    let users = [...state.model.users];
+    users.push(payload);
+    const usersHelper = {};
+    users.forEach(u => {
+      usersHelper[u.model.id] = u;
+    });
+    users = [];
+    Object.keys(usersHelper).forEach(uk => {
+      users.push(usersHelper[uk]);
+    });
+    patchState({...state, model: {users}});
+    console.log(usersHelper);
   }
 
 

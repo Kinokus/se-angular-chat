@@ -1,1 +1,9 @@
-<p>chat-users-window works!</p>
+<!--{{users$ | async | json}}-->
+<div class="main-content">
+  <img
+    class="user-image"
+    [src]="user.model.qrImage"
+    alt=""
+    *ngFor="let user of (users$|async).model.users"
+  >
+</div>

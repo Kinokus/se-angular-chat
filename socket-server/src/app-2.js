@@ -5,10 +5,12 @@ const app = require('express')();
 const server = createServer(app);
 const ws = new Server({server});
 const getUuid = require('uuid-by-string');
+const QRCode = require('qrcode')
+
 
 server.listen(4444);
 let messages = {'init id': {id: 'init id', text: 'init text'}};
-ws.on('connection', (socket) => {
+ws.on('connection', async (socket) => {
   socket.userId = uuid();
 
   // TODO : LEGACY
@@ -28,11 +30,22 @@ ws.on('connection', (socket) => {
   socket.send(
     JSON.stringify({
       type: '[Chat] New Connection',
-      payload: {model: {id: socket.userId}}
+      payload: {model: {id: socket.userId, qrImage: await QRCode.toDataURL(socket.userId)}}
+
     }));
 
 
-  ws.clients.forEach(client => {
+  //[Chat] New User
+
+
+  ws.clients.forEach(async client => {
+
+    client.send(
+      JSON.stringify({
+        type: '[Chat] New User',
+        payload: {model: {id: socket.userId, qrImage: await QRCode.toDataURL(socket.userId)}}
+      }));
+
     if (client.userId !== socket.userId) {
       client.send(
         JSON.stringify({
@@ -76,7 +89,7 @@ ws.on('connection', (socket) => {
 
       case 'chatSendMessages': {
         //TODO filter maintenance messages !
-        console.log(model);
+        
         ws.clients.forEach(client => {
           if (client.userId !== socket.userId) {
             client.send(
