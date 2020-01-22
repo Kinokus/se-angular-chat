@@ -7,13 +7,17 @@
  - on connection of new user get messages from all connected users
  - message id - `timestamp + uuid`
  - typing online
+ 
 ### UI
+ - on connect - request all connected users
  - save messages in local storage
  - send private messages
  - show / hide windows 
  - add landing page (maybe)
  - css
  - typing online
+ - decentralize (p2p)
+ 
 
 
 
