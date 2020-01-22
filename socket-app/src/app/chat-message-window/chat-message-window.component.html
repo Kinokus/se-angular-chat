@@ -1,7 +1,22 @@
 <div class="main-content">
   <div *ngFor="let chatMessage of (chat$ | async).model.chatMessages">
-    {{chatMessage['id']}} -
-    {{chatMessage['text']}} -
-    {{chatMessage['senderId']}}
+    <img
+      ngxGravatar
+      size="12"
+      [email]="chatMessage['senderId'] + '@mail.com'"
+      [round]="false"
+      [fallback]="'robohash'"
+      alt=""
+    >
+    <img
+      ngxGravatar
+      size="12"
+      [email]="chatMessage['id'] + '@mail.com'"
+      [round]="false"
+      alt=""
+    >
+
+    {{chatMessage['text']}}
+
   </div>
 </div>

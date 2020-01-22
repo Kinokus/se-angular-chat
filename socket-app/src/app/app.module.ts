@@ -21,6 +21,8 @@ import {ChatUsersWindowComponent} from './chat-users-window/chat-users-window.co
 import {ChatMessageInputComponent} from './chat-message-input/chat-message-input.component';
 import {ChatState, ChatUsersState, ChatUserState} from './states/chat-state';
 import {ChatUserStateComponent} from './chat-user-state/chat-user-state.component';
+import { GravatarPipe } from './gravatar.pipe';
+import {GravatarModule} from 'ngx-gravatar';
 
 
 // const config: SocketIoConfig = {url: 'http://localhost:4444', options: {}};
@@ -39,7 +41,8 @@ const config = {
     ChatMessageWindowComponent,
     ChatUsersWindowComponent,
     ChatMessageInputComponent,
-    ChatUserStateComponent
+    ChatUserStateComponent,
+    GravatarPipe
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,8 @@ const config = {
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
     NgxsWebsocketPluginModule.forRoot(config),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GravatarModule
 
   ],
 

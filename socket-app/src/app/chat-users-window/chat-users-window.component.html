@@ -1,9 +1,14 @@
-<!--{{users$ | async | json}}-->
 <div class="main-content">
-  <img
-    class="user-image"
-    [src]="user.model.qrImage"
-    alt=""
-    *ngFor="let user of (users$|async).model.users"
-  >
+  <div *ngFor="let user of (users$|async).model.users" class="user-string">
+    <img
+      ngxGravatar
+      size="36"
+      [email]="user.model.id + '@mail.com'"
+      [fallback]="'robohash'"
+      [round]="false"
+      alt=""
+    >
+    {{user.model.username}}
+
+  </div>
 </div>

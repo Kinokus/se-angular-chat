@@ -25,6 +25,7 @@
     "@ngxs/store": "^3.6.1-dev.master-aa2aacf",
     "@ngxs/websocket-plugin": "^3.6.1",
     "immer": "^5.3.2",
+    "ngx-gravatar": "^8.1.0",
     "ngx-socket-io": "^3.0.1",
     "qrcode": "^1.4.4",
     "rxjs": "~6.4.0",
