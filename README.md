@@ -17,7 +17,7 @@
  - css
  - typing online
  - decentralize (p2p)
- 
+ - detect current host and connect socket host / need to be dynamic /
 
 
 
