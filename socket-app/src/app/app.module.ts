@@ -1,3 +1,4 @@
+import { WINDOW_PROVIDERS } from './window.provider';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
@@ -26,8 +27,11 @@ import {GravatarModule} from 'ngx-gravatar';
 
 
 // const config: SocketIoConfig = {url: 'http://localhost:4444', options: {}};
+
+
 const config = {
-  url: 'ws://localhost:4444'
+  url: `ws://${window.location.hostname}:4444`
+  // url: 'ws://localhost:4444'
 };
 
 
@@ -62,7 +66,7 @@ const config = {
 
   ],
 
-  providers: [],
+  providers: [WINDOW_PROVIDERS],
   bootstrap: [AppComponent]
 })
 export class AppModule {

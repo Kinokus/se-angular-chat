@@ -7,22 +7,22 @@
  - on connection of new user get messages from all connected users
  - message id - `timestamp + uuid`
  - typing online
- 
+
 ### UI
  - on connect - request all connected users
  - save messages in local storage
  - send private messages
- - show / hide windows 
+ - show / hide windows
  - add landing page (maybe)
  - css
  - typing online
  - decentralize (p2p)
- - detect current host and connect socket host / need to be dynamic /
+ - user can change name
 
 
 
 
- 
+
  # SeAngularChat
  This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.0.
  ## Development server
