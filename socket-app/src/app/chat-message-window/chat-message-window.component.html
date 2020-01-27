@@ -2,7 +2,7 @@
   <div *ngFor="let chatMessage of (chat$ | async).model.chatMessages">
     <img
       ngxGravatar
-      size="12"
+      size="16"
       [email]="chatMessage['senderId'] + '@mail.com'"
       [round]="false"
       [fallback]="'robohash'"

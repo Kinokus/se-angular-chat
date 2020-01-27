@@ -4,7 +4,7 @@ import {
   ChatNewConnection,
   ChatNewMessage,
   ChatNewUser,
-  ChatRequestMessages,
+  ChatRequestMessages, ChatUserChangeName,
   ChatUserModel
 } from '../actions/chat-actions';
 import {Action, NgxsOnInit, State, StateContext, Store} from '@ngxs/store';
@@ -85,6 +85,7 @@ export class ChatState implements NgxsOnInit {
   }
 }
 
+
 @State<ChatUserModel>({
   name: 'chatUser',
   defaults: {
@@ -134,6 +135,26 @@ export class ChatUsersState implements NgxsOnInit {
     users.forEach(u => {
       usersHelper[u.model.id] = u;
     });
+    users = [];
+    Object.keys(usersHelper).forEach(uk => {
+      users.push(usersHelper[uk]);
+    });
+    patchState({...state, model: {users}});
+    console.log(usersHelper);
+  }
+
+  @Action(ChatUserChangeName)
+  chatUserChangeName({getState, patchState, setState}: StateContext<ChatUsersModel>,
+                     {payload}: ChatUserChangeName) {
+
+    const state = getState();
+    let users = [...state.model.users];
+    // users.push(payload);
+    const usersHelper = {};
+    users.forEach(u => {
+      usersHelper[u.model.id] = u;
+    });
+    usersHelper[payload.model.id] = payload
     users = [];
     Object.keys(usersHelper).forEach(uk => {
       users.push(usersHelper[uk]);

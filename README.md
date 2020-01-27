@@ -10,6 +10,7 @@
 
 ### UI
  - on connect - request all connected users
+ - user can change name
  - save messages in local storage
  - send private messages
  - show / hide windows
@@ -17,7 +18,7 @@
  - css
  - typing online
  - decentralize (p2p)
- - user can change name
+ 
 
 
 

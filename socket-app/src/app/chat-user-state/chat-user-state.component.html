@@ -1,2 +1,8 @@
-<img src="{{(user$ | async).model.qrImage}}" alt="">
-<!--<pre>{{user$ | async | json}}</pre>-->
+<!--<img src="{{(user$ | async).model.qrImage}}" alt="">-->
+<pre>{{user$ | async | json}}</pre>
+<div *ngIf="!!userForm" [formGroup]="userForm">
+  <label> <input formControlName="username" type="text"> </label>
+  <button (click)="changeName()">
+    Send
+  </button>
+</div>

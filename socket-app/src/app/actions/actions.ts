@@ -39,10 +39,10 @@ export class MessageEditedFromUi {
   constructor(public messageText: string) { }
 }
 
-
 export class ConnectToMessages {
   static readonly type = '[Message] ConnectToMessages';
 }
+
 export class ConnectToMessage {
   static readonly type = '[Message] ConnectToMessage';
 }

@@ -16,7 +16,6 @@ ws.on('connection', async (socket) => {
   // TODO : LEGACY
   socket.send(JSON.stringify({type: '[Message List] Get Messages From Server', payload: Object.keys(messages)}));
 
-
   socket.send(
     JSON.stringify({
       type: '[Chat] New Message',
@@ -35,10 +34,7 @@ ws.on('connection', async (socket) => {
     }));
 
 
-  //[Chat] New User
-
-
-  ws.clients.forEach(async client => {
+    ws.clients.forEach(async client => {
 
     client.send(
       JSON.stringify({
@@ -86,7 +82,6 @@ ws.on('connection', async (socket) => {
         });
         break;
       }
-
       case 'chatSendMessages': {
         //TODO filter maintenance messages !
         
@@ -103,6 +98,25 @@ ws.on('connection', async (socket) => {
 
         break
       }
+      case 'chatUserChangeName': {
+        //TODO filter maintenance messages !
+
+        console.log(model, socket.userId);
+
+        ws.clients.forEach(client => {
+          // if (client.userId !== socket.userId) {
+            client.send(
+              JSON.stringify({
+                type: '[Chat] User Change Name',
+                payload: {model: {id: socket.userId, username:model.username}}
+              }));
+          // }
+        });
+        break
+      }
+
+
+
 
       // todo: legacy
       case 'message': {
