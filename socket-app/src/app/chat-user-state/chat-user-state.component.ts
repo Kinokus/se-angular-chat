@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {ChatState, ChatUserState} from '../states/chat-state';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ChatModel, ChatUserModel} from '../actions/chat-actions';
 import {FormControl, FormGroup} from '@angular/forms';
 import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
@@ -15,7 +15,7 @@ export class ChatUserStateComponent implements OnInit {
   private userForm: FormGroup;
 
   constructor(private store: Store) { }
-  @Select(ChatUserState) user$: Observable<ChatUserState>;
+  @Select(ChatUserState) user$: BehaviorSubject<ChatUserState>;
   ngOnInit() {
 
     this.userForm = new FormGroup({

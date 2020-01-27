@@ -27,6 +27,8 @@ export class ChatUsersModel {
 })
 export class ChatState implements NgxsOnInit {
 
+
+
   constructor(private store: Store) {
 
   }
@@ -55,10 +57,8 @@ export class ChatState implements NgxsOnInit {
   }
 
   @Action(ChatGetMessages)
-  chatGetMessages({getState, patchState}: StateContext<any>, {payload}: ChatGetMessages) {
+  async chatGetMessages({getState, patchState}: StateContext<any>, {payload}: ChatGetMessages) {
     const state = getState();
-    // console.log(state.model.chatMessages.slice());
-    // console.log(payload.messages);
     let messages = state.model.chatMessages.slice().concat(payload.messages);
 
     const messageHelper: any = {};
@@ -70,13 +70,20 @@ export class ChatState implements NgxsOnInit {
       messages.push(messageHelper[mk]);
     });
 
-
     patchState({...state, model: {chatMessages: messages}});
+
+    console.log(messageHelper);
+
+
+    // // TODO: OPTIMIZE
+    // const event = new SendWebSocketMessage({
+    //   type: 'chatUserChangeName',
+    //   model: (await this.store.select(ChatUserState).toPromise()).model
+    // });
+    // this.store.dispatch(event);
   }
 
 
-  // TODO: get all messages
-  // TODO: send all messages
   // TODO: online typing
 
 
@@ -103,9 +110,9 @@ export class ChatUserState implements NgxsOnInit {
     {payload}: ChatNewConnection) {
 
     const state = getState();
-    const id = payload.model.id;
-    const qrImage = payload.model.qrImage;
-    patchState({...state, model: {id, qrImage}});
+    // const id = payload.model.id;
+    // const qrImage = payload.model.qrImage;
+    patchState({...state, model: payload.model});
   }
 
 

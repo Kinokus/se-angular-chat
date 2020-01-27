@@ -13,6 +13,12 @@ let messages = {'init id': {id: 'init id', text: 'init text'}};
 ws.on('connection', async (socket) => {
   socket.userId = uuid();
 
+  const userModel = {
+    id: socket.userId,
+    qrImage: await QRCode.toDataURL(socket.userId),
+    username: "%username%"
+  }
+
   // TODO : LEGACY
   socket.send(JSON.stringify({type: '[Message List] Get Messages From Server', payload: Object.keys(messages)}));
 
@@ -29,17 +35,19 @@ ws.on('connection', async (socket) => {
   socket.send(
     JSON.stringify({
       type: '[Chat] New Connection',
-      payload: {model: {id: socket.userId, qrImage: await QRCode.toDataURL(socket.userId)}}
-
+      payload: {
+        model: userModel
+      }
     }));
 
 
-    ws.clients.forEach(async client => {
-
+  ws.clients.forEach(async client => {
     client.send(
       JSON.stringify({
         type: '[Chat] New User',
-        payload: {model: {id: socket.userId, qrImage: await QRCode.toDataURL(socket.userId)}}
+        payload: {
+          model: userModel
+        }
       }));
 
     if (client.userId !== socket.userId) {
@@ -84,7 +92,7 @@ ws.on('connection', async (socket) => {
       }
       case 'chatSendMessages': {
         //TODO filter maintenance messages !
-        
+
         ws.clients.forEach(client => {
           if (client.userId !== socket.userId) {
             client.send(
@@ -105,11 +113,11 @@ ws.on('connection', async (socket) => {
 
         ws.clients.forEach(client => {
           // if (client.userId !== socket.userId) {
-            client.send(
-              JSON.stringify({
-                type: '[Chat] User Change Name',
-                payload: {model: {id: socket.userId, username:model.username}}
-              }));
+          client.send(
+            JSON.stringify({
+              type: '[Chat] User Change Name',
+              payload: {model: {id: socket.userId, username: model.username}}
+            }));
           // }
         });
         break
