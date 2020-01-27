@@ -22,15 +22,15 @@ ws.on('connection', async (socket) => {
   // TODO : LEGACY
   socket.send(JSON.stringify({type: '[Message List] Get Messages From Server', payload: Object.keys(messages)}));
 
-  socket.send(
-    JSON.stringify({
-      type: '[Chat] New Message',
-      payload: {
-        text: `Your new Id is ${socket.userId.split('-')[1]}`,
-        id: getUuid(`${new Date().getTime().toString()}_${socket.userId}_join_Us`),
-        senderId: socket.userId
-      }
-    }));
+  // socket.send(
+  //   JSON.stringify({
+  //     type: '[Chat] New Message',
+  //     payload: {
+  //       text: `Your new Id is ${socket.userId.split('-')[1]}`,
+  //       id: getUuid(`${new Date().getTime().toString()}_${socket.userId}_join_Us`),
+  //       senderId: socket.userId
+  //     }
+  //   }));
 
   socket.send(
     JSON.stringify({
