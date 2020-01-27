@@ -1,5 +1,6 @@
 export enum ChatActionsEnum {
-  ChatUserChangeName= '[Chat] User Change Name',
+  ChatUserChangeName = '[Chat] User Change Name',
+  ChatRequestUsers = '[Chat] Request Users',
   ChatNewConnection = '[Chat] New Connection',
   ChatNewUser = '[Chat] New User',
   ChatNewMessage = '[Chat] New Message',
@@ -55,7 +56,6 @@ export class ChatUserChangeName {
 }
 
 
-
 export class ChatGetMessages {
   static readonly type = ChatActionsEnum.ChatGetMessages; // required
   constructor(public payload: { messages: ChatMessageModel[] }) {
@@ -64,4 +64,8 @@ export class ChatGetMessages {
 
 export class ChatRequestMessages {
   static readonly type = ChatActionsEnum.ChatRequestMessages; // required
+}
+
+export class ChatRequestUsers {
+  static readonly type = ChatActionsEnum.ChatRequestUsers; // required
 }

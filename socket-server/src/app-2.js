@@ -15,7 +15,7 @@ ws.on('connection', async (socket) => {
 
   const userModel = {
     id: socket.userId,
-    qrImage: await QRCode.toDataURL(socket.userId),
+    // qrImage: await QRCode.toDataURL(socket.userId),
     username: "%username%"
   }
 
@@ -64,6 +64,12 @@ ws.on('connection', async (socket) => {
       client.send(
         JSON.stringify({
           type: '[Chat] Request Messages',
+          payload: {}
+        }));
+
+      client.send(
+        JSON.stringify({
+          type: '[Chat] Request Users',
           payload: {}
         }));
     }
