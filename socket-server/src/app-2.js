@@ -1,23 +1,59 @@
 const {Server} = require('ws');
 const {createServer} = require('http');
 const uuid = require('uuid-random');
-const app = require('express')();
+const express = require('express');
+const getUuid = require('uuid-by-string');
+const path = require('path');
+const ngrok = require('ngrok');
+const fs = require('fs');
+
+// const serveStatic = require('serve-static');
+// todo: dynamic favicon
+
+const app = express();
 const server = createServer(app);
 const ws = new Server({server});
-const getUuid = require('uuid-by-string');
-const QRCode = require('qrcode')
 
 
-server.listen(4444);
+app.use('/', express.static(path.join(__dirname, 'chat')));
+app.get('/chatUrl', (req, res) => res.send({chatUrl}));
+
+
+
+let mainUrl = '';
+let chatUrl = '';
+ngrok.connect({addr: 88})
+  .then(url => {
+    mainUrl = url;
+    console.log(mainUrl);
+  })
+  .catch(err => console.log(err));
+
+ngrok
+  .connect({proto: 'tcp',addr: 4444})
+  .then(url => {
+
+    chatUrl = `ws://${url.split('/')[2]}`;
+
+    console.log(url.split('/'));
+    // fs.writeFileSync('./chat/chat.config.json', JSON.stringify({chatUrl}));
+    server.listen(4444);
+    app.listen(88);
+  })
+  .catch(err => console.log(err));
+
+
+
+
+
+
 let messages = {'init id': {id: 'init id', text: 'init text'}};
 ws.on('connection', async (socket) => {
   socket.userId = uuid();
-
   const userModel = {
     id: socket.userId,
-    // qrImage: await QRCode.toDataURL(socket.userId),
     username: "%username%"
-  }
+  };
 
   // TODO : LEGACY
   socket.send(JSON.stringify({type: '[Message List] Get Messages From Server', payload: Object.keys(messages)}));
