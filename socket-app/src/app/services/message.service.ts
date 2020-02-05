@@ -3,11 +3,29 @@ import {Socket} from 'ngx-socket-io';
 import {Message, MessageStateServerModel} from '../models/message';
 import {Store} from '@ngxs/store';
 import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
+
+  public static chatUrl: string;
+  public static initApp = (http: HttpClient) => {
+    return () => {
+      const url = `https://${window.location.hostname}/chatUrl`;
+      return http.get(url)
+        .toPromise()
+        .then((resp: { chatUrl: string }) => {
+          MessageService.chatUrl = resp.chatUrl;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  };
+
+
   // currentMessage = this.socket.fromEvent<Message>('message');
   // messages = this.socket.fromEvent<string[]>('messages');
 

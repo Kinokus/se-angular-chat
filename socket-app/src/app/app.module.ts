@@ -1,6 +1,6 @@
-import { WINDOW_PROVIDERS } from './window.provider';
+import {WINDOW_PROVIDERS} from './window.provider';
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, Injectable, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -22,17 +22,18 @@ import {ChatUsersWindowComponent} from './chat-users-window/chat-users-window.co
 import {ChatMessageInputComponent} from './chat-message-input/chat-message-input.component';
 import {ChatState, ChatUsersState, ChatUserState} from './states/chat-state';
 import {ChatUserStateComponent} from './chat-user-state/chat-user-state.component';
-import { GravatarPipe } from './gravatar.pipe';
+import {GravatarPipe} from './gravatar.pipe';
 import {GravatarModule} from 'ngx-gravatar';
+// import chatUrl from './chat.config.json';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {MessageService} from './services/message.service';
 
 
 // const config: SocketIoConfig = {url: 'http://localhost:4444', options: {}};
 
 
-const config = {
-  url: `ws://${window.location.hostname}:4444`
-  // url: 'ws://localhost:4444'
-};
+// TODO : RECONNECT AUTOMATICALLY
+// TODO : get host and port from config
 
 
 @NgModule({
@@ -48,7 +49,14 @@ const config = {
     ChatUserStateComponent,
     GravatarPipe
   ],
+  providers: [WINDOW_PROVIDERS, {
+    provide: APP_INITIALIZER,
+    useFactory: MessageService.initApp,
+    deps: [HttpClient],
+    multi: true
+  }],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot([
@@ -60,14 +68,15 @@ const config = {
     NgxsModule.forRoot([MessageState, MessageListState, ChatState, ChatUserState, ChatUsersState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
-    NgxsWebsocketPluginModule.forRoot(config),
+    NgxsWebsocketPluginModule.forRoot({url: MessageService.chatUrl}),
     ReactiveFormsModule,
     GravatarModule
 
   ],
-
-  providers: [WINDOW_PROVIDERS],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
+
+
+
