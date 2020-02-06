@@ -30,7 +30,7 @@ ngrok.connect({addr: 88})
   .catch(err => console.log(err));
 
 ngrok
-  .connect({proto: 'tcp',addr: 4444})
+  .connect({addr: 4444})
   .then(url => {
 
     chatUrl = `ws://${url.split('/')[2]}`;

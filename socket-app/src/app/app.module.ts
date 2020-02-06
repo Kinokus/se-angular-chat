@@ -68,7 +68,7 @@ import {MessageService} from './services/message.service';
     NgxsModule.forRoot([MessageState, MessageListState, ChatState, ChatUserState, ChatUsersState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
-    NgxsWebsocketPluginModule.forRoot({url: MessageService.chatUrl}),
+    NgxsWebsocketPluginModule.forRoot(),
     ReactiveFormsModule,
     GravatarModule
 

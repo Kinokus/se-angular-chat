@@ -13,7 +13,7 @@ export class MessageService {
   public static chatUrl: string;
   public static initApp = (http: HttpClient) => {
     return () => {
-      const url = `https://${window.location.hostname}/chatUrl`;
+      const url = `http://${window.location.hostname}/chatUrl`;
       return http.get(url)
         .toPromise()
         .then((resp: { chatUrl: string }) => {

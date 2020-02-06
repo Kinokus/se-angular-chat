@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ChatMessageModel} from '../actions/chat-actions';
+import {Store} from '@ngxs/store';
+import {ConnectWebSocket} from '@ngxs/websocket-plugin';
+import {MessageService} from '../services/message.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -8,13 +11,14 @@ import {ChatMessageModel} from '../actions/chat-actions';
 })
 export class ChatWindowComponent implements OnInit {
 
-  tempMessage: ChatMessageModel;
 
-  constructor() {
+  constructor(private store: Store) {
 
   }
 
   ngOnInit() {
+    console.log(MessageService.chatUrl);
+    this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl}));
   }
 
 }
