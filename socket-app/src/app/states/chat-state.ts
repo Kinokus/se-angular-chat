@@ -85,7 +85,7 @@ export class ChatState implements NgxsOnInit {
   name: 'chatUser',
   defaults: {
     model: {
-      id: '',
+      id: null,
       username: '%username%'
     }
   }
@@ -101,7 +101,16 @@ export class ChatUserState implements NgxsOnInit {
     {payload}: ChatNewConnection) {
 
     const state = getState();
+
+    // if (state.model.id) {
+    //   const event = new SendWebSocketMessage({
+    //     type: 'chatUserChangeName',
+    //     model: state.model
+    //   });
+    //   this.store.dispatch(event);
+    // } else {
     patchState({...state, model: payload.model});
+    // }
   }
 
 

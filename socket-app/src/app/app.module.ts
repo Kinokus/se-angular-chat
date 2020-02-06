@@ -27,6 +27,7 @@ import {GravatarModule} from 'ngx-gravatar';
 // import chatUrl from './chat.config.json';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {MessageService} from './services/message.service';
+import {NgxsStoragePluginModule} from '@ngxs/storage-plugin';
 
 
 // const config: SocketIoConfig = {url: 'http://localhost:4444', options: {}};
@@ -70,7 +71,8 @@ import {MessageService} from './services/message.service';
     NgxsFormPluginModule.forRoot(),
     NgxsWebsocketPluginModule.forRoot(),
     ReactiveFormsModule,
-    GravatarModule
+    GravatarModule,
+    NgxsStoragePluginModule.forRoot({key: [MessageState, MessageListState, ChatState, ChatUserState, ChatUsersState]})
 
   ],
   bootstrap: [AppComponent]

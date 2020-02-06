@@ -19,7 +19,6 @@ app.use('/', express.static(path.join(__dirname, 'chat')));
 app.get('/chatUrl', (req, res) => res.send({chatUrl}));
 
 
-
 let mainUrl = '';
 let chatUrl = '';
 ngrok.connect({addr: 88})
@@ -32,28 +31,26 @@ ngrok.connect({addr: 88})
 ngrok
   .connect({addr: 4444})
   .then(url => {
-
     chatUrl = `ws://${url.split('/')[2]}`;
-
     console.log(url.split('/'));
-    // fs.writeFileSync('./chat/chat.config.json', JSON.stringify({chatUrl}));
     server.listen(4444);
     app.listen(88);
   })
   .catch(err => console.log(err));
 
 
-
-
-
-
 let messages = {'init id': {id: 'init id', text: 'init text'}};
-ws.on('connection', async (socket) => {
-  socket.userId = uuid();
+ws.on('connection', async (socket, request, client) => {
+
+  socket.userId = request.url.split('/')[1] ? request.url.split('/')[1] : uuid();
+
   const userModel = {
     id: socket.userId,
-    username: "%username%"
+    username: request.url.split('/')[2] ? request.url.split('/')[2] :"%username%"
   };
+
+
+
 
   // TODO : LEGACY
   socket.send(JSON.stringify({type: '[Message List] Get Messages From Server', payload: Object.keys(messages)}));
@@ -150,9 +147,7 @@ ws.on('connection', async (socket) => {
       }
       case 'chatUserChangeName': {
         //TODO filter maintenance messages !
-
-        console.log(model, socket.userId);
-
+        // socket.userId = model.id;
         ws.clients.forEach(client => {
           // if (client.userId !== socket.userId) {
           client.send(
