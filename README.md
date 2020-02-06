@@ -7,11 +7,14 @@
  - on connection of new user get messages from all connected users
  - message id - `timestamp + uuid`
  - typing online
+ - ping users / remove if not responding
 
 ### UI
  - add / commands
  - add @ user-list
  - add # tags
+ - automaticly reconnect 
+ - ping users / remove if not responding
  - user can change name
  - save messages in local storage
  - send private messages
@@ -20,6 +23,7 @@
  - css
  - typing online
  - decentralize (p2p)
+ 
  
 
 
