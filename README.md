@@ -9,7 +9,9 @@
  - typing online
 
 ### UI
- - on connect - request all connected users
+ - add / commands
+ - add @ user-list
+ - add # tags
  - user can change name
  - save messages in local storage
  - send private messages
