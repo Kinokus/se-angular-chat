@@ -4,11 +4,12 @@ import {
   ChatNewConnection,
   ChatNewMessage,
   ChatNewUser,
-  ChatRequestMessages, ChatRequestUsers, ChatUserChangeName,
+  ChatRequestMessages, ChatRequestUsers, ChatSocketConnect, ChatUserChangeName,
   ChatUserModel
 } from '../actions/chat-actions';
 import {Action, NgxsOnInit, State, StateContext, Store} from '@ngxs/store';
-import {SendWebSocketMessage} from '@ngxs/websocket-plugin';
+import {ConnectWebSocket, SendWebSocketMessage} from '@ngxs/websocket-plugin';
+import {MessageService} from '../services/message.service';
 
 export class ChatUsersModel {
   model: {
@@ -27,9 +28,9 @@ export class ChatUsersModel {
 })
 export class ChatState implements NgxsOnInit {
 
-
   constructor(private store: Store) {
   }
+
 
   @Action(ChatNewMessage)
   chatNewMessage(
@@ -94,6 +95,39 @@ export class ChatUserState implements NgxsOnInit {
 
   constructor(private store: Store) {
   }
+
+  @Action(ChatSocketConnect)
+  chatSocketConnect(
+    {getState, patchState, setState}: StateContext<ChatUserModel>) {
+    console.log(MessageService.chatUrl);
+    const state = getState();
+    const model = state.model;
+    if (model.id) {
+      this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl + `/${model.id}/${model.username}`}));
+    } else {
+      this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl}));
+    }
+    /*
+    *
+    *     // TODO: NEED normal dispatch
+
+    this.store.selectOnce(ChatUserState)
+      .toPromise()
+      .then((user) => {
+        console.log(user);
+        if (user.model.id) {
+          this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl + `/${user.model.id}/${user.model.username}`}));
+        } else {
+          this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl}));
+        }
+
+      });
+
+    *
+    * */
+
+  }
+
 
   @Action(ChatNewConnection)
   chatNewConnection(

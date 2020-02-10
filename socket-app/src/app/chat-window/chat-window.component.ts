@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ChatMessageModel} from '../actions/chat-actions';
+import {ChatMessageModel, ChatSocketConnect} from '../actions/chat-actions';
 import {Store} from '@ngxs/store';
 import {ConnectWebSocket} from '@ngxs/websocket-plugin';
 import {MessageService} from '../services/message.service';
@@ -19,19 +19,21 @@ export class ChatWindowComponent implements OnInit {
 
   ngOnInit() {
 
-    // TODO: NEED normal dispatch
-    console.log(MessageService.chatUrl);
-    this.store.selectOnce(ChatUserState)
-      .toPromise()
-      .then((user) => {
-        console.log(user);
-        if (user.model.id) {
-          this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl + `/${user.model.id}/${user.model.username}`}));
-        } else {
-          this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl}));
-        }
+    this.store.dispatch(new ChatSocketConnect());
 
-      });
+    // // TODO: NEED normal dispatch
+    // console.log(MessageService.chatUrl);
+    // this.store.selectOnce(ChatUserState)
+    //   .toPromise()
+    //   .then((user) => {
+    //     console.log(user);
+    //     if (user.model.id) {
+    //       this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl + `/${user.model.id}/${user.model.username}`}));
+    //     } else {
+    //       this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl}));
+    //     }
+    //
+    //   });
 
   }
 

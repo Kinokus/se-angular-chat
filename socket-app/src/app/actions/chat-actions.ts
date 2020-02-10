@@ -5,7 +5,8 @@ export enum ChatActionsEnum {
   ChatNewUser = '[Chat] New User',
   ChatNewMessage = '[Chat] New Message',
   ChatRequestMessages = '[Chat] Request Messages',
-  ChatGetMessages = '[Chat] Get Messages'
+  ChatGetMessages = '[Chat] Get Messages',
+  ChatSocketConnect = '[Chat] Socket Connect'
 }
 
 export class ChatMessageModel {
@@ -69,3 +70,8 @@ export class ChatRequestMessages {
 export class ChatRequestUsers {
   static readonly type = ChatActionsEnum.ChatRequestUsers; // required
 }
+
+export class ChatSocketConnect {
+  static readonly type = ChatActionsEnum.ChatSocketConnect; // required
+}
+
