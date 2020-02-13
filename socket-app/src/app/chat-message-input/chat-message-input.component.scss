@@ -1,0 +1,15 @@
+.main-content {
+  border: 1px solid firebrick;
+  display: flex;
+  flex: 1 0 auto;
+  height: auto;
+
+  label {
+    display: flex;
+    flex: 1 0 auto;
+    margin: 4px;
+    input {
+      flex: 1 0 auto;
+    }
+  }
+}

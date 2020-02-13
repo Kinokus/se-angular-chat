@@ -1,5 +1,6 @@
+<!--TODO:Lazy load message rows-->
 <div class="main-content">
-  <div *ngFor="let chatMessage of (chat$ | async).model.chatMessages">
+  <div *ngFor="let chatMessage of (chat$ | async).model.chatMessages" class="message-row">
     <img
       ngxGravatar
       size="16"

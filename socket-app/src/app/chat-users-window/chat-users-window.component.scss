@@ -1,13 +1,12 @@
 .main-content {
-
-  border: 1px solid darksalmon;
+  border: 1px solid firebrick;
   overflow-y: auto;
-  height: 100%;
+  flex: 1 0 auto;
 
   .user-string {
     padding: var(--small-padding);
     margin: var(--small-margin);
-    border: 1px solid cornflowerblue;
+
     .user-image {
       width: var(--user-image-size);
       height: var(--user-image-size);

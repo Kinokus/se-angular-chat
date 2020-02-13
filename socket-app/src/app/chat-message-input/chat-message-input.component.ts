@@ -35,6 +35,7 @@ export class ChatMessageInputComponent implements OnInit {
       }
     });
     this.store.dispatch(event);
+    this.chatMessageForm.get('text').setValue('');
   }
 
 }

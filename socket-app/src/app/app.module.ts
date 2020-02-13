@@ -34,8 +34,6 @@ import {NgxsStoragePluginModule} from '@ngxs/storage-plugin';
 
 
 // TODO : RECONNECT AUTOMATICALLY
-// TODO : get host and port from config
-
 
 @NgModule({
   declarations: [

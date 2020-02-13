@@ -1,4 +1,5 @@
 export enum ChatActionsEnum {
+  ChatGetSocketUrl = '[Chat] Get Socket Url',
   ChatUserChangeName = '[Chat] User Change Name',
   ChatRequestUsers = '[Chat] Request Users',
   ChatNewConnection = '[Chat] New Connection',
@@ -19,7 +20,8 @@ export class ChatMessageModel {
 
 export class ChatModel {
   model: {
-    chatMessages: ChatMessageModel[]
+    chatMessages?: ChatMessageModel[]
+    socketUrl?: string
   };
 }
 
@@ -73,5 +75,9 @@ export class ChatRequestUsers {
 
 export class ChatSocketConnect {
   static readonly type = ChatActionsEnum.ChatSocketConnect; // required
+}
+
+export class ChatGetSocketUrl {
+  static readonly type = ChatActionsEnum.ChatGetSocketUrl; // required
 }
 

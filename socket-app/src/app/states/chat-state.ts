@@ -1,5 +1,5 @@
 import {
-  ChatGetMessages,
+  ChatGetMessages, ChatGetSocketUrl,
   ChatModel,
   ChatNewConnection,
   ChatNewMessage,
@@ -8,8 +8,9 @@ import {
   ChatUserModel
 } from '../actions/chat-actions';
 import {Action, NgxsOnInit, State, StateContext, Store} from '@ngxs/store';
-import {ConnectWebSocket, SendWebSocketMessage} from '@ngxs/websocket-plugin';
+import {ConnectWebSocket, SendWebSocketMessage, WebSocketConnected, WebSocketDisconnected} from '@ngxs/websocket-plugin';
 import {MessageService} from '../services/message.service';
+import {HttpClient} from '@angular/common/http';
 
 export class ChatUsersModel {
   model: {
@@ -22,13 +23,15 @@ export class ChatUsersModel {
   name: 'chat',
   defaults: {
     model: {
-      chatMessages: []
+      chatMessages: [],
+      socketUrl: ''
+
     }
   }
 })
 export class ChatState implements NgxsOnInit {
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private http: HttpClient) {
   }
 
 
@@ -75,6 +78,42 @@ export class ChatState implements NgxsOnInit {
 
   // TODO: online typing
 
+  @Action(WebSocketConnected)
+  async socketConnected(ctx: StateContext<any>, action: WebSocketConnected) {
+    console.log('WebSocketConnected', action);
+  }
+
+  @Action(WebSocketDisconnected)
+  async socketDisconnected(ctx: StateContext<any>, action: WebSocketDisconnected) {
+    console.log('WebSocketDisconnected', action);
+    this.store.dispatch(new ChatSocketConnect());
+  }
+
+
+  @Action(ChatGetSocketUrl)
+  async chatGetSocketUrl({getState, patchState}: StateContext<ChatModel>, action: ChatGetSocketUrl) {
+    const state = getState();
+    const model = state.model;
+    // get url
+    const url = `http://${window.location.hostname}/chatUrl`;
+    return this.http.get(url)
+      .toPromise()
+      .then((resp: { chatUrl: string }) => {
+        model.socketUrl = resp.chatUrl;
+        MessageService.chatUrl = resp.chatUrl;
+
+        patchState({...state, model: {socketUrl: resp.chatUrl}});
+        
+
+
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+
+  }
 
   ngxsOnInit(ctx?: StateContext<any>): void | any {
     return undefined;
@@ -103,28 +142,12 @@ export class ChatUserState implements NgxsOnInit {
     const state = getState();
     const model = state.model;
     if (model.id) {
-      this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl + `/${model.id}/${model.username}`}));
+      this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl + `/${model.id}/${encodeURI(model.username)}`}));
     } else {
       this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl}));
     }
-    /*
-    *
-    *     // TODO: NEED normal dispatch
 
-    this.store.selectOnce(ChatUserState)
-      .toPromise()
-      .then((user) => {
-        console.log(user);
-        if (user.model.id) {
-          this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl + `/${user.model.id}/${user.model.username}`}));
-        } else {
-          this.store.dispatch(new ConnectWebSocket({url: MessageService.chatUrl}));
-        }
-
-      });
-
-    *
-    * */
+    // TODO: NEED normal dispatch for chat url
 
   }
 
@@ -229,4 +252,5 @@ export class ChatUsersState implements NgxsOnInit {
 
 
 // TODO: state with active users
-
+// TODO: on socket disconnect get URL and reconnect again
+// TODO: state with current selected user

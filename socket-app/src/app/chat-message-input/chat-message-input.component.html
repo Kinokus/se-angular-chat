@@ -1,6 +1,11 @@
-<div *ngIf="!!chatMessageForm" [formGroup]="chatMessageForm">
-  <label> <input formControlName="text" type="text"> </label>
-  <button (click)="sendMessage()">
-    Send
-  </button>
+<div *ngIf="!!chatMessageForm" [formGroup]="chatMessageForm" class="main-content">
+  <label>
+    <input (keyup.enter)="sendMessage()"
+           formControlName="text"
+           placeholder="To send message type and press enter"
+           type="text">
+  </label>
+  <!--  <button (click)="sendMessage()">-->
+  <!--    Send-->
+  <!--  </button>-->
 </div>

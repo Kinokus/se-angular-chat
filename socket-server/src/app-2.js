@@ -21,7 +21,7 @@ app.get('/chatUrl', (req, res) => res.send({chatUrl}));
 
 let mainUrl = '';
 let chatUrl = '';
-ngrok.connect({addr: 88})
+ngrok.connect({addr: 88, authtoken: '1XI4GdbwUMTBaqvag4z1vadkll2_5PZHM29mk7ufffa4NWzC', subdomain: 'bizarre'})
   .then(url => {
     mainUrl = url;
     console.log(mainUrl);
@@ -46,7 +46,7 @@ ws.on('connection', async (socket, request, client) => {
 
   const userModel = {
     id: socket.userId,
-    username: request.url.split('/')[2] ? request.url.split('/')[2] :"%username%"
+    username: request.url.split('/')[2] ? decodeURI(request.url.split('/')[2]) :"%username%"
   };
 
 
